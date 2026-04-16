@@ -235,15 +235,7 @@
       "url": "http://zhangqun1818.serv00.net/zq/api.json"
     },
     {
-      "name": "自建1影视仓",
-      "url": "http://影视仓.com/"
-    },
-    {
-      "name": "自建2catvod",
-      "url": "https://tvbox.catvod.com/catvod.json"
-    },
-    {
-      "name": "自建3𝑏𝑖𝑛𝑠𝑖𝑡𝑒黄",
+      "name": "自建𝑏𝑖𝑛𝑠𝑖𝑡𝑒黄",
       "url": "https://gh-proxy.org/raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json"
     }
 
