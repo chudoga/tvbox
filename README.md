@@ -240,11 +240,11 @@
     },
     {
       "name": "自建2𝑏𝑖𝑛𝑠𝑖𝑡𝑒黄",
-      "url": "https://gh-proxy.org/raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json"
+      "url": "https://raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json"
     },
     {
       "name": "自建3wwb521黄",
-      "url": "https://gh-proxy.org/https://raw.githubusercontent.com/wwb521/live/main/video.json"
+      "url": "https://raw.githubusercontent.com/wwb521/live/main/video.json"
     },
     {
       "name": "自建4cluntop黄",
