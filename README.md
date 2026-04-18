@@ -235,8 +235,36 @@
       "url": "http://zhangqun1818.serv00.net/zq/api.json"
     },
     {
-      "name": "自建𝑏𝑖𝑛𝑠𝑖𝑡𝑒黄",
+      "name": "自建1stymei黄",
+      "https://raw.githubusercontent.com/chudoga/tvbox/refs/heads/main/stymei18.txt"
+    },
+    {
+      "name": "自建2𝑏𝑖𝑛𝑠𝑖𝑡𝑒黄",
       "url": "https://gh-proxy.org/raw.githubusercontent.com/bin1site1/bin1site1.github.io/refs/heads/main/OS.json"
+    },
+    {
+      "name": "自建3wwb521黄",
+      "url": "https://gh-proxy.org/https://raw.githubusercontent.com/wwb521/live/main/video.json"
+    },
+    {
+      "name": "自建4cluntop黄",
+      "url": "https://clun.top/fun.json"
+    },
+    {
+      "name": "自建5cluntop绿",
+      "url": "https://clun.top/box.json"
+    },
+    {
+      "name": "自建6bizhangjie黄",
+      "url": "https://github.com/bizhangjie/CatVodSpider/blob/main/json/index18.json"
+    },
+    {
+      "name": "自建7bizhangjie绿",
+      "url": "https://github.com/bizhangjie/CatVodSpider/blob/main/json/index.json"
+    },
+    {
+      "name": "自建8supermeguo绿",
+      "url": "https://raw.githubusercontent.com/supermeguo/BoxRes/main/Myuse/catcr.json"
     }
 
   ]
