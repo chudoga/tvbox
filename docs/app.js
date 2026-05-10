@@ -227,7 +227,7 @@ function drawSpectrum() {
   ctx.fillStyle = grad;
 
   for (let i = 0; i < barCount; i++) {
-    const barHeight = (dataArray[i] / 255) * h;
+    const barHeight = Math.min(((dataArray[i] / 255) * h) * 1.8, h);
     ctx.fillRect(i * barWidth, h - barHeight, Math.max(barWidth - 1, 1), barHeight);
   }
 
@@ -239,6 +239,7 @@ async function initAudio() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
   analyser.fftSize = 512;
+  analyser.smoothingTimeConstant = 0.3;
   analyser.connect(audioCtx.destination);
   resizeSpectrum();
   window.addEventListener('resize', resizeSpectrum);
