@@ -268,66 +268,100 @@ body {
 
 /* ============ Source Card ============ */
 .source-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
   transition: all var(--transition);
-  min-height: 52px;
 }
 
 .source-card:hover {
-  border-color: var(--accent);
   box-shadow: var(--shadow-hover);
 }
 
-.source-card .status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: var(--status-unknown);
+.source-card.hidden {
+  display: none;
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.card-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.card-badge {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg);
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* URL Rows */
+.card-urls {
+  padding: 4px 0;
+}
+
+.card-url-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
   transition: background var(--transition);
 }
 
-.source-card .status-indicator.online { background: var(--status-online); }
-.source-card .status-indicator.offline { background: var(--status-offline); }
-
-.source-card .source-info {
-  flex: 1;
-  min-width: 0;
+.card-url-row:hover {
+  background: var(--accent-light);
 }
 
-.source-card .source-name {
-  font-size: 0.9rem;
+.card-url-row + .card-url-row {
+  border-top: 1px solid var(--border);
+}
+
+.url-label {
+  font-size: 0.78rem;
   font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.source-card .source-url {
-  font-size: 0.75rem;
   color: var(--text-secondary);
+  min-width: 44px;
+  flex-shrink: 0;
+}
+
+.url-text {
+  flex: 1;
+  font-size: 0.78rem;
+  font-family: "SF Mono", "Fira Code", monospace;
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 2px;
-  font-family: "SF Mono", "Fira Code", monospace;
+  padding: 2px 0;
 }
 
-.source-card .source-actions {
+.url-actions {
   display: flex;
   gap: 6px;
   flex-shrink: 0;
 }
 
-.source-card .btn {
-  padding: 6px 12px;
-  font-size: 0.78rem;
+.url-actions .btn {
+  padding: 5px 12px;
+  font-size: 0.75rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
@@ -338,34 +372,41 @@ body {
   white-space: nowrap;
 }
 
-.source-card .btn-copy:hover {
+.url-actions .btn-copy:hover {
   background: var(--accent);
   color: white;
   border-color: var(--accent);
 }
 
-.source-card .btn-copy.copied {
+.url-actions .btn-copy.copied {
   background: var(--status-online);
   color: white;
   border-color: var(--status-online);
 }
 
-.source-card .btn-check {
-  padding: 6px 10px;
-}
-
-.source-card .btn-check:hover {
-  background: var(--bg);
-  color: var(--text);
-}
-
-.source-card .btn-check:disabled {
+.url-actions .btn-check:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.source-card.hidden {
-  display: none;
+/* Responsive URL rows */
+@media (max-width: 640px) {
+  .card-url-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .url-label {
+    min-width: 36px;
+  }
+  .url-text {
+    width: 100%;
+    order: 1;
+  }
+  .url-actions {
+    width: 100%;
+    order: 2;
+    justify-content: flex-end;
+  }
 }
 
 /* ============ Empty State ============ */
