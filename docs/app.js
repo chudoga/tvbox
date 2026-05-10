@@ -52,7 +52,8 @@ function setQuote() {
   greetingEl.classList.add('fade');
   const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   const parts = q.split('，');
-  sloganEl.innerHTML = parts.join('<br>');
+  const mid = Math.ceil(parts.length / 2);
+  sloganEl.innerHTML = parts.slice(0, mid).join('，') + '<br>' + parts.slice(mid).join('，');
   sloganEl.classList.add('visible');
 }
 
@@ -114,14 +115,15 @@ function initParticles() {
   function create(count) {
     const cx = w * 0.88;
     const cy = h * 0.12;
-    const maxR = Math.max(w, h) * 0.75;
+    const maxR = Math.max(w, h) * 0.9;
+    const minR = Math.min(w, h) * 0.08;
     particles = [];
     for (let i = 0; i < count; i++) {
       const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
       particles.push({
-        radius: 15 + Math.random() * maxR,
+        radius: minR + Math.random() * maxR,
         angle: Math.random() * Math.PI * 2,
-        speed: (0.3 + Math.random() * 0.7) * 0.025,
+        speed: (0.3 + Math.random() * 0.7) * 0.006,
         size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
@@ -132,7 +134,7 @@ function initParticles() {
   }
 
   function draw() {
-    ctx.fillStyle = 'rgba(11,14,23,0.03)';
+    ctx.fillStyle = 'rgba(11,14,23,0.006)';
     ctx.fillRect(0, 0, w, h);
 
     const cx = w * 0.88;
