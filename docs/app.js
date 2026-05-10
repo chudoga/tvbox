@@ -150,8 +150,7 @@ function initParticles() {
     const cx = w * 0.88;
     const cy = h * 0.12;
 
-    ctx.fillStyle = 'rgba(11,14,23,0.02)';
-    ctx.fillRect(0, 0, w, h);
+    ctx.clearRect(0, 0, w, h);
 
     for (const p of particles) {
       p.sx = p.x;
@@ -240,7 +239,7 @@ async function initAudio() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
   analyser.fftSize = 512;
-  analyser.smoothingTimeConstant = 0.8;
+  analyser.smoothingTimeConstant = 0.4;
   analyser.connect(audioCtx.destination);
   resizeSpectrum();
   window.addEventListener('resize', resizeSpectrum);
