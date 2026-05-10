@@ -132,7 +132,7 @@ function initParticles() {
       particles.push({
         radius,
         angle,
-        speed: (0.3 + Math.random() * 0.7) * 0.00035,
+        speed: (0.3 + Math.random() * 0.7) * 0.005,
         size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
@@ -147,8 +147,6 @@ function initParticles() {
   }
 
   function draw() {
-    ctx.clearRect(0, 0, w, h);
-
     const cx = w * 0.88;
     const cy = h * 0.12;
 
@@ -162,7 +160,7 @@ function initParticles() {
       ctx.beginPath();
       ctx.moveTo(p.sx, p.sy);
       ctx.lineTo(p.x, p.y);
-      ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,0.3)`;
+      ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a})`;
       ctx.lineWidth = p.size * 2;
       ctx.stroke();
 
@@ -227,7 +225,7 @@ function drawSpectrum() {
   ctx.fillStyle = grad;
 
   for (let i = 0; i < barCount; i++) {
-    const barHeight = Math.min(((dataArray[i] / 255) * h) * 1.8, h);
+    const barHeight = Math.min(((dataArray[i] / 255) * h) * 5, h);
     ctx.fillRect(i * barWidth, h - barHeight, Math.max(barWidth - 1, 1), barHeight);
   }
 
