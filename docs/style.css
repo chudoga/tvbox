@@ -34,6 +34,12 @@ body {
   height: 100%;
   z-index: 0;
   pointer-events: none;
+  animation: bg-spin 60s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes bg-spin {
+  to { transform: rotate(360deg); }
 }
 
 .cover::before {

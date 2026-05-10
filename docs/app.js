@@ -38,7 +38,10 @@ const greetingEl = document.querySelector('.greeting');
 const sloganEl = document.getElementById('slogan');
 function setQuote() {
   greetingEl.classList.add('fade');
-  sloganEl.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  const parts = q.split('，');
+  const mid = Math.ceil(parts.length / 2);
+  sloganEl.innerHTML = parts.slice(0, mid).join('，') + '，<br>' + parts.slice(mid).join('，');
   sloganEl.classList.add('visible');
 }
 
@@ -52,7 +55,7 @@ function renderSources() {
       <div class="link-inner">
         <div class="link-icon" style="background:${s.color}33; color:${s.color}">${s.icon}</div>
         <span class="link-name">${s.name}</span>
-        ${i === 0 ? '<span class="copy-hint">点击复制</span>' : ''}
+        
       </div>
     </div>
   `).join('');
@@ -117,7 +120,8 @@ function initParticles() {
   }
 
   function draw() {
-    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(11,14,23,0.12)';
+    ctx.fillRect(0, 0, w, h);
     for (const p of particles) {
       p.x += p.dx; p.y += p.dy; p.a += p.da;
       if (p.a > 0.95 || p.a < 0.15) p.da = -p.da;
