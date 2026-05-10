@@ -97,14 +97,16 @@ function resize() {
 function createStars(count) {
   stars = [];
   for (let i = 0; i < count; i++) {
+    const isBig = Math.random() < 0.05;
     stars.push({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: Math.random() * 1.8 + 0.2,
-      dx: (Math.random() - 0.5) * 0.3,
-      dy: (Math.random() - 0.5) * 0.3,
-      a: Math.random() * 0.8 + 0.2,
-      da: (Math.random() - 0.5) * 0.005
+      r: isBig ? Math.random() * 2.5 + 1.5 : Math.random() * 1.5 + 0.5,
+      dx: (Math.random() - 0.5) * 0.4,
+      dy: (Math.random() - 0.5) * 0.4,
+      a: isBig ? Math.random() * 0.5 + 0.5 : Math.random() * 0.6 + 0.4,
+      da: (Math.random() - 0.5) * 0.008,
+      big: isBig
     });
   }
 }
@@ -115,26 +117,40 @@ function drawStars() {
     s.x += s.dx;
     s.y += s.dy;
     s.a += s.da;
-    if (s.a > 1 || s.a < 0.1) s.da = -s.da;
+    if (s.a > 1 || s.a < 0.2) s.da = -s.da;
     if (s.x < 0) s.x = w;
     if (s.x > w) s.x = 0;
     if (s.y < 0) s.y = h;
     if (s.y > h) s.y = 0;
+
     ctx.beginPath();
     ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${s.a})`;
-    ctx.fill();
+
+    if (s.big) {
+      const gradient = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
+      gradient.addColorStop(0, `rgba(180,210,255,${s.a * 0.8})`);
+      gradient.addColorStop(1, `rgba(180,210,255,0)`);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r * 0.6, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+      ctx.fill();
+    } else {
+      ctx.fillStyle = `rgba(200,220,255,${s.a})`;
+      ctx.fill();
+    }
   }
   requestAnimationFrame(drawStars);
 }
 
 function initCanvas() {
   resize();
-  createStars(180);
+  createStars(350);
   drawStars();
   window.addEventListener('resize', () => {
     resize();
-    createStars(250);
+    createStars(350);
   });
 }
 
