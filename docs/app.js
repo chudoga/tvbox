@@ -52,8 +52,7 @@ function setQuote() {
   greetingEl.classList.add('fade');
   const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   const parts = q.split('，');
-  const mid = Math.ceil(parts.length / 2);
-  sloganEl.innerHTML = parts.slice(0, mid).join('，') + '<br>' + parts.slice(mid).join('，');
+  sloganEl.innerHTML = parts.map(p => '<div>' + p + '</div>').join('');
   sloganEl.classList.add('visible');
 }
 
@@ -123,7 +122,7 @@ function initParticles() {
       particles.push({
         radius: minR + Math.random() * maxR,
         angle: Math.random() * Math.PI * 2,
-        speed: (0.3 + Math.random() * 0.7) * 0.006,
+        speed: (0.3 + Math.random() * 0.7) * 0.0015,
         size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
@@ -268,18 +267,28 @@ renderSources();
 setTimeout(setQuote, 2000);
 initParticles();
 
-// Autoplay music on page load
-setTimeout(async () => {
-  try {
-    await initAudio();
-    if (audioCtx.state === 'suspended') await audioCtx.resume();
+// Autoplay music - try on load, also capture first user interaction
+function tryStartMusic() {
+  if (musicPlaying) return;
+  initAudio().then(() => {
+    if (audioCtx.state === 'suspended') return audioCtx.resume();
+  }).then(() => {
     loadRandomTrack();
     musicBtn.classList.add('playing');
     musicBtn.textContent = '\u2669';
     spectrumCanvas.classList.add('visible');
     drawSpectrum();
     musicPlaying = true;
-  } catch (e) {
-    // Browser blocked autoplay - user can click button
-  }
-}, 1000);
+  }).catch(() => {});
+}
+
+setTimeout(tryStartMusic, 1000);
+
+function onFirstInteraction() {
+  document.removeEventListener('click', onFirstInteraction);
+  document.removeEventListener('touchstart', onFirstInteraction);
+  document.removeEventListener('keydown', onFirstInteraction);
+  tryStartMusic();
+}
+document.addEventListener('click', onFirstInteraction);
+document.addEventListener('touchstart', onFirstInteraction);

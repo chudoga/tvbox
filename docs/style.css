@@ -119,10 +119,24 @@ body {
 .slogan-wrap {
   position: relative;
   min-height: 7rem;
+  max-width: 90vw;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 90vw;
+}
+
+.greeting,
+.slogan-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 600px;
+  padding: 0 16px;
+  text-align: center;
+  pointer-events: none;
 }
 
 .greeting {
@@ -134,7 +148,6 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.4;
-  position: absolute;
   opacity: 1;
   transition: opacity 0.6s ease;
 }
@@ -152,11 +165,8 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.5;
-  position: absolute;
   opacity: 0;
   transition: opacity 0.8s ease;
-  max-width: 600px;
-  padding: 0 16px;
 }
 
 .slogan-text.visible {
