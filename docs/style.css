@@ -16,7 +16,7 @@ body {
   overflow-x: hidden;
 }
 
-#starfield {
+.bg-canvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -32,9 +32,31 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at 50% 30%, rgba(11,14,23,0) 0%, rgba(11,14,23,0.5) 70%);
   z-index: 0;
   pointer-events: none;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(130,80,255,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255,80,140,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,180,255,0.1) 0%, transparent 60%);
+  animation: bg-shift 10s ease-in-out infinite alternate;
+}
+
+@keyframes bg-shift {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(11,14,23,0) 0%, rgba(11,14,23,0.5) 80%);
 }
 
 .main {
@@ -52,38 +74,78 @@ body {
 
 /* ===== Hero ===== */
 .hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  padding: 80px 0 48px;
+  min-height: 40vh;
+  padding: 40px 0 48px;
 }
 
+.slogan-wrap {
+  position: relative;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#greeting,
 #slogan {
-  font-size: 2.6rem;
+  font-size: 2.8rem;
   font-weight: 700;
-  margin-bottom: 8px;
   letter-spacing: -0.02em;
   background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  min-height: 3.2rem;
+  line-height: 1.4;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  position: absolute;
+  white-space: nowrap;
+}
+
+#greeting {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#greeting.fade-out {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+#slogan {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+#slogan.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#slogan.hidden {
+  display: none;
 }
 
 .brand {
   position: relative;
   display: inline-block;
-  font-size: 6.5rem;
+  font-size: 4.2rem;
   font-weight: 900;
   line-height: 1;
   color: #e8e8e8;
-  margin-top: 8px;
+  margin-top: 16px;
 }
 
 .brand-ring {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 140px;
-  height: 140px;
+  width: 100px;
+  height: 100px;
   transform: translate(-50%, -50%);
 }
 
@@ -290,17 +352,19 @@ body {
 
 @media (max-width: 480px) {
   .hero {
-    padding: 60px 0 36px;
+    min-height: 35vh;
+    padding: 30px 0 36px;
   }
+  #greeting,
   #slogan {
     font-size: 2rem;
   }
   .brand {
-    font-size: 5rem;
+    font-size: 3.2rem;
   }
   .brand-ring {
-    width: 110px;
-    height: 110px;
+    width: 80px;
+    height: 80px;
   }
   .link-inner {
     padding: 14px 18px;

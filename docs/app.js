@@ -1,43 +1,30 @@
 const SOURCES = [
-  {
-    name: '裤佬',
-    url: 'https://pastebin.com/raw/enF00p5e',
-    color: '#28a9e0',
-    icon: '📦'
-  },
-  {
-    name: '游魂',
-    url: 'https://www.iyouhun.com/tv/dc',
-    color: '#db1f76',
-    icon: '👻'
-  },
-  {
-    name: '拾光',
-    url: 'https://xmbjm.fh4u.org/dc.txt',
-    color: '#F7DC6F',
-    icon: '✨'
-  }
+  { name: '裤佬', url: 'https://pastebin.com/raw/enF00p5e', color: '#28a9e0', icon: '📦' },
+  { name: '游魂', url: 'https://www.iyouhun.com/tv/dc', color: '#db1f76', icon: '👻' },
+  { name: '拾光', url: 'https://xmbjm.fh4u.org/dc.txt', color: '#F7DC6F', icon: '✨' }
 ];
 
 const QUOTES = [
-  'Hi~',
-  '生活明朗，万物可爱',
-  '保持热爱，奔赴山海',
-  '心之所向，素履以往',
-  '不期而遇，如期而至',
-  '且听风吟，静待花开',
-  '眼里有光，心中有火',
-  '山高路远，看世界也找自己',
-  '愿日子清透，世事皆温柔',
-  '时光知味，岁月沉香',
-  '一半烟火，一半诗意',
-  '把期望降低，把依赖变少',
-  '日子常新，未来不远',
-  '心有山海，静而无边',
-  '做自己的光，不需要太亮'
+  '生活明朗，万物可爱，人间值得，未来可期',
+  '保持热爱，奔赴山海，忠于自己，热爱生活',
+  '心之所向，素履以往，生如逆旅，一苇以航',
+  '不期而遇，如期而至，来日方长，未来可期',
+  '且听风吟，静待花开，不问归期，只争朝夕',
+  '眼里有光，心中有火，脚下有路，未来可期',
+  '山高路远，看世界也找自己，做最好的自己',
+  '愿日子清透，世事皆温柔，岁月皆可回首',
+  '时光知味，岁月沉香，不负韶华，不负自己',
+  '一半烟火，一半诗意，一半争取，一半随缘',
+  '把期望降低，把依赖变少，把心放平放宽',
+  '日子常新，未来不远，万事胜意，来日可期',
+  '心有山海，静而无边，行而无疆，爱而无畏',
+  '做自己的光，不需要太亮，足以温暖自己就好',
+  '与其互为人间，不如自成宇宙，各自发光发热'
 ];
 
 const toast = document.getElementById('toast');
+const greeting = document.getElementById('greeting');
+const slogan = document.getElementById('slogan');
 let toastTimer;
 
 function showToast(msg) {
@@ -47,9 +34,14 @@ function showToast(msg) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-function setRandomQuote() {
-  const el = document.getElementById('slogan');
-  el.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+function revealQuote() {
+  slogan.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  greeting.classList.remove('hidden');
+  slogan.classList.remove('hidden');
+  setTimeout(() => {
+    greeting.classList.add('fade-out');
+    slogan.classList.add('fade-in');
+  }, 100);
 }
 
 function renderSources() {
@@ -84,76 +76,93 @@ async function handleCopy(idx) {
   setTimeout(() => item.classList.remove('copied'), 2000);
 }
 
-const canvas = document.getElementById('starfield');
+/* ===== Colorful Particles ===== */
+const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
-let stars = [];
+let particles = [];
 let w, h;
+
+const PALETTES = [
+  { h: 220, s: 70 },  // blue
+  { h: 260, s: 65 },  // purple
+  { h: 330, s: 60 },  // pink
+  { h: 190, s: 65 },  // cyan
+  { h: 280, s: 55 },  // violet
+  { h: 350, s: 50 },  // rose
+  { h: 210, s: 60 },  // sky blue
+  { h: 300, s: 50 }   // magenta
+];
 
 function resize() {
   w = canvas.width = window.innerWidth;
   h = canvas.height = window.innerHeight;
 }
 
-function createStars(count) {
-  stars = [];
+function createParticles(count) {
+  particles = [];
   for (let i = 0; i < count; i++) {
-    const isBig = Math.random() < 0.05;
-    stars.push({
+    const palette = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+    const isBig = Math.random() < 0.04;
+    particles.push({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: isBig ? Math.random() * 2.5 + 1.5 : Math.random() * 1.5 + 0.5,
-      dx: (Math.random() - 0.5) * 0.4,
-      dy: (Math.random() - 0.5) * 0.4,
-      a: isBig ? Math.random() * 0.5 + 0.5 : Math.random() * 0.6 + 0.4,
-      da: (Math.random() - 0.5) * 0.008,
+      r: isBig ? Math.random() * 2.5 + 2 : Math.random() * 1.8 + 0.6,
+      dx: (Math.random() - 0.5) * 0.25,
+      dy: (Math.random() - 0.5) * 0.25 - 0.1,
+      hue: palette.h + (Math.random() - 0.5) * 20,
+      sat: palette.s + (Math.random() - 0.5) * 10,
+      light: isBig ? 65 + Math.random() * 15 : 55 + Math.random() * 20,
+      a: isBig ? 0.5 + Math.random() * 0.3 : 0.3 + Math.random() * 0.4,
+      da: (Math.random() - 0.5) * 0.006,
       big: isBig
     });
   }
 }
 
-function drawStars() {
+function drawParticles() {
   ctx.clearRect(0, 0, w, h);
-  for (const s of stars) {
-    s.x += s.dx;
-    s.y += s.dy;
-    s.a += s.da;
-    if (s.a > 1 || s.a < 0.2) s.da = -s.da;
-    if (s.x < 0) s.x = w;
-    if (s.x > w) s.x = 0;
-    if (s.y < 0) s.y = h;
-    if (s.y > h) s.y = 0;
+  for (const p of particles) {
+    p.x += p.dx;
+    p.y += p.dy;
+    p.a += p.da;
+    if (p.a > 0.9 || p.a < 0.15) p.da = -p.da;
+    if (p.x < -10) p.x = w + 10;
+    if (p.x > w + 10) p.x = -10;
+    if (p.y < -10) p.y = h + 10;
+    if (p.y > h + 10) p.y = -10;
 
     ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
 
-    if (s.big) {
-      const gradient = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
-      gradient.addColorStop(0, `rgba(180,210,255,${s.a * 0.8})`);
-      gradient.addColorStop(1, `rgba(180,210,255,0)`);
-      ctx.fillStyle = gradient;
+    if (p.big) {
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      grad.addColorStop(0, `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a * 0.6})`);
+      grad.addColorStop(1, `hsla(${p.hue},${p.sat}%,${p.light}%,0)`);
+      ctx.fillStyle = grad;
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r * 0.6, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+      ctx.arc(p.x, p.y, p.r * 0.6, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue},${p.sat}%,${p.light + 15}%,${p.a})`;
       ctx.fill();
     } else {
-      ctx.fillStyle = `rgba(200,220,255,${s.a})`;
+      ctx.fillStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a})`;
       ctx.fill();
     }
   }
-  requestAnimationFrame(drawStars);
+  requestAnimationFrame(drawParticles);
 }
 
 function initCanvas() {
   resize();
-  createStars(350);
-  drawStars();
+  createParticles(400);
+  drawParticles();
   window.addEventListener('resize', () => {
     resize();
-    createStars(350);
+    createParticles(400);
   });
 }
 
-setRandomQuote();
+/* ===== Init ===== */
+revealQuote();
 renderSources();
 initCanvas();
