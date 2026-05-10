@@ -3,15 +3,6 @@ const CHIPTUNE_TRACKS = [
   { name: 'Game Travel 1', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/xfM1AiGFIMxEojwwcjWk4cLxdhBSyqLHTtWqGyWo.mp3' },
   { name: 'Dark Forest', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/aiFgUzkuMGYZZsSPzE6lknpNHFY9Oew8ciaAbAoO.mp3' },
   { name: 'Comfort Game 1', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/662zS7xARjpO2oCvK0HLvb7GyHMVyiDCiUz39HfA.mp3' },
-  { name: 'Atmosphere 1', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/r0JS2sNigLgxxr0ZgV6jzFjSeRB13u3ygJ9kYQsh.mp3' },
-  { name: 'Starships', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/mczFstI7D8DOfLNeTB2XWffjLioCixVisvdIR3Pz.mp3' },
-  { name: 'Deus Ex Machina', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/ILAx0IRAisEEHh6X8KJaoP9jUMBKrHsc3rX4pnwB.mp3' },
-  { name: 'Game Travel V3', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/k5nyqYLvmqn5VYt0Pvi2LF8tILui6LqAS2tV2Ygz.mp3' },
-  { name: 'Jump!', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/kQ3qDA0qADr19BJzyl5wMMrdy51wiBL7U0HIQtW6.mp3' },
-  { name: 'Mini Boss', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/jdM1QIY8TIhsh4lVyzT5sp00BnDG5alcdNb4pqKI.mp3' },
-  { name: 'Magic Orb', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/OWgH1bGhwePp1JrRArfSPATqIyZ56jIXbpGL4MDp.mp3' },
-  { name: 'A Fight In the Dark', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/e1HTJmRjeQqtEOsEJJEOlV8N2shJ9nbjJbsxkhq1.mp3' },
-  { name: 'Quickly!', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/EoLqNzoS0ZDbaWDVHEj9SU7GmV5c5jmMBky164pP.mp3' },
 ];
 
 const SOURCES = [
