@@ -52,8 +52,7 @@ function setQuote() {
   greetingEl.classList.add('fade');
   const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   const parts = q.split('，');
-  const mid = Math.ceil(parts.length / 2);
-  sloganEl.innerHTML = parts.slice(0, mid).join('，') + '，<br>' + parts.slice(mid).join('，');
+  sloganEl.innerHTML = parts.join('<br>');
   sloganEl.classList.add('visible');
 }
 
@@ -113,9 +112,9 @@ function initParticles() {
   }
 
   function create(count) {
-    const cx = w / 2;
-    const cy = h / 2;
-    const maxR = Math.min(w, h) * 0.48;
+    const cx = w * 0.88;
+    const cy = h * 0.12;
+    const maxR = Math.max(w, h) * 0.75;
     particles = [];
     for (let i = 0; i < count; i++) {
       const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
@@ -136,11 +135,11 @@ function initParticles() {
     ctx.fillStyle = 'rgba(11,14,23,0.03)';
     ctx.fillRect(0, 0, w, h);
 
-    const cx = w / 2;
-    const cy = h / 2;
+    const cx = w * 0.88;
+    const cy = h * 0.12;
 
     for (const p of particles) {
-      p.angle -= p.speed;
+      p.angle += p.speed;
       const x = cx + Math.cos(p.angle) * p.radius;
       const y = cy + Math.sin(p.angle) * p.radius;
 
@@ -266,3 +265,19 @@ bgMusic.addEventListener('ended', () => {
 renderSources();
 setTimeout(setQuote, 2000);
 initParticles();
+
+// Autoplay music on page load
+setTimeout(async () => {
+  try {
+    await initAudio();
+    if (audioCtx.state === 'suspended') await audioCtx.resume();
+    loadRandomTrack();
+    musicBtn.classList.add('playing');
+    musicBtn.textContent = '\u2669';
+    spectrumCanvas.classList.add('visible');
+    drawSpectrum();
+    musicPlaying = true;
+  } catch (e) {
+    // Browser blocked autoplay - user can click button
+  }
+}, 1000);
