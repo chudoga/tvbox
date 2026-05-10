@@ -129,6 +129,8 @@ function initParticles() {
       const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
       const angle = Math.random() * Math.PI * 2;
       const radius = minR + Math.random() * maxR;
+      const x0 = cx + Math.cos(angle) * radius;
+      const y0 = cy + Math.sin(angle) * radius;
       particles.push({
         radius,
         angle,
@@ -138,10 +140,9 @@ function initParticles() {
         sat: p.s + (Math.random() - 0.5) * 8,
         light: 55 + Math.random() * 25,
         a: 0.25 + Math.random() * 0.25,
-        sx: cx + Math.cos(angle) * radius,
-        sy: cy + Math.sin(angle) * radius,
-        x: cx + Math.cos(angle) * radius,
-        y: cy + Math.sin(angle) * radius,
+        x: x0,
+        y: y0,
+        trail: [{x: x0, y: y0}],
       });
     }
   }
@@ -150,22 +151,34 @@ function initParticles() {
     const cx = w * 0.9;
     const cy = h * 0.1;
 
-    ctx.fillStyle = 'rgba(11,14,23,0.05)';
-    ctx.fillRect(0, 0, w, h);
+    ctx.clearRect(0, 0, w, h);
 
     for (const p of particles) {
-      p.sx = p.x;
-      p.sy = p.y;
+      p.trail.push({x: p.x, y: p.y});
+      if (p.trail.length > 600) p.trail.shift();
+
       p.angle += p.speed;
       p.x = cx + Math.cos(p.angle) * p.radius;
       p.y = cy + Math.sin(p.angle) * p.radius;
 
-      ctx.beginPath();
-      ctx.moveTo(p.sx, p.sy);
-      ctx.lineTo(p.x, p.y);
-      ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a})`;
-      ctx.lineWidth = p.size * 2;
-      ctx.stroke();
+      const tlen = p.trail.length;
+      if (tlen > 1) {
+        const batch = Math.max(1, Math.floor(tlen / 10));
+        for (let b = 0; b < 10; b++) {
+          const start = b * batch;
+          const end = Math.min(tlen, start + batch);
+          if (end - start < 2) continue;
+          const fade = (10 - b) / 10;
+          ctx.beginPath();
+          ctx.moveTo(p.trail[start].x, p.trail[start].y);
+          for (let j = start + 1; j < end; j++) {
+            ctx.lineTo(p.trail[j].x, p.trail[j].y);
+          }
+          ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a * fade})`;
+          ctx.lineWidth = p.size * 2 * fade;
+          ctx.stroke();
+        }
+      }
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
