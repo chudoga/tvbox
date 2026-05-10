@@ -111,9 +111,9 @@ function initParticles() {
   }
 
   function create(count) {
-    const cx = w * 4.5;
-    const cy = h * -3.5;
-    const maxR = Math.max(w, h) * 0.9;
+    const cx = w * 1.2;
+    const cy = h * 0.5;
+    const maxR = Math.max(w, h) * 1.8;
     const minR = Math.min(w, h) * 0.08;
     particles = [];
     for (let i = 0; i < count; i++) {
@@ -139,8 +139,8 @@ function initParticles() {
   }
 
   function draw() {
-    const cx = w * 4.5;
-    const cy = h * -3.5;
+    const cx = w * 1.2;
+    const cy = h * 0.5;
 
     ctx.clearRect(0, 0, w, h);
 
