@@ -303,5 +303,9 @@ renderSources();
 setTimeout(setQuote, 2000);
 initParticles();
 
-// Autoplay attempt (browser may block)
-setTimeout(() => startMusic(), 1000);
+// Autoplay: start on first user click anywhere (browser policy)
+const firstClick = () => {
+  document.removeEventListener('click', firstClick);
+  startMusic();
+};
+document.addEventListener('click', firstClick);
