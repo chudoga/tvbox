@@ -132,7 +132,7 @@ function initParticles() {
       particles.push({
         radius,
         angle,
-        speed: (0.3 + Math.random() * 0.7) * 0.005,
+        speed: (0.3 + Math.random() * 0.7) * 0.0025,
         size: Math.random() * 1.25 + 0.5,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
@@ -150,7 +150,7 @@ function initParticles() {
     const cx = w * 0.88;
     const cy = h * 0.12;
 
-    ctx.fillStyle = 'rgba(11,14,23,0.005)';
+    ctx.fillStyle = 'rgba(11,14,23,0.01)';
     ctx.fillRect(0, 0, w, h);
 
     for (const p of particles) {
@@ -228,7 +228,7 @@ function drawSpectrum() {
   ctx.fillStyle = grad;
 
   for (let i = 0; i < barCount; i++) {
-    const barHeight = Math.min((dataArray[i] / 255) * h, h);
+    const barHeight = Math.min(((dataArray[i] / 255) * h) * 2, h);
     ctx.fillRect(i * barWidth, h - barHeight, Math.max(barWidth - 1, 1), barHeight);
   }
 
@@ -239,7 +239,7 @@ async function initAudio() {
   if (audioCtx) return;
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 2048;
+  analyser.fftSize = 1024;
   analyser.smoothingTimeConstant = 0.8;
   analyser.connect(audioCtx.destination);
   resizeSpectrum();
