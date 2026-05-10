@@ -228,7 +228,7 @@ function drawSpectrum() {
   ctx.fillStyle = grad;
 
   for (let i = 0; i < barCount; i++) {
-    const barHeight = Math.min(((dataArray[i] / 255) * h) * 4, h);
+    const barHeight = Math.min((dataArray[i] / 255) * h, h);
     ctx.fillRect(i * barWidth, h - barHeight, Math.max(barWidth - 1, 1), barHeight);
   }
 
