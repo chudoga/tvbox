@@ -377,7 +377,7 @@ body {
   width: 200%;
   height: 200%;
   transform: translate(-50%, -50%);
-  background: url('https://i.imgur.com/2Z6yYVg.gif') center/cover no-repeat;
+  background: url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center/cover no-repeat;
   animation: spin 60s linear infinite;
   z-index: -1;
 }
