@@ -12,10 +12,6 @@ const CHIPTUNE_TRACKS = [
   { name: 'Magic Orb', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/OWgH1bGhwePp1JrRArfSPATqIyZ56jIXbpGL4MDp.mp3' },
   { name: 'A Fight In the Dark', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/e1HTJmRjeQqtEOsEJJEOlV8N2shJ9nbjJbsxkhq1.mp3' },
   { name: 'Quickly!', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/EoLqNzoS0ZDbaWDVHEj9SU7GmV5c5jmMBky164pP.mp3' },
-  { name: 'A Hero Is Born', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/oU22bnSqimStpOaGrtFWDJ3C78zHgbs5Qnak3b0R.mp3' },
-  { name: 'Flying', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/yq9dZSkSdgVfVFS3SdO2GOzOWCHtCeB6af66Qm3l.mp3' },
-  { name: 'Half Machine', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/h27o7kN6dWumAQpWULYcgy6leVmLDxkxXqyEk1kh.mp3' },
-  { name: 'Mystery', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/eLCiGmiO5yRPVZ8IaMQdpjcecWiXx6hu1mg63bv9.mp3' }
 ];
 
 const SOURCES = [
@@ -36,10 +32,6 @@ const QUOTES = [
   '不要以为全世界只有你的代码在报错<br>别人的只是比你会吞异常',
   '一个视频有多长<br>要看你是用二倍速还是原速',
   '人生有时就像解 Bug<br>明明感觉对了跑起来却一片红',
-  '纵有千古，横有八荒<br>前途似海，来日方长',
-  '可以选择放弃<br>但不能放弃选择',
-  '愿你片源永不失效<br>愿你网速永不过载',
-  '三分靠片源，七分靠网速<br>剩下九十分看播放器给不给力',
   '你永远不知道<br>下一个接口明天还能不能用<br>就像你不知道<br>明天和意外哪个先来'
 ];
 
