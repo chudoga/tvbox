@@ -111,8 +111,8 @@ function initParticles() {
   }
 
   function create(count) {
-    const cx = w * 0.5;
-    const cy = h * 0.5;
+    const cx = w * 4.5;
+    const cy = h * -3.5;
     const maxR = Math.max(w, h) * 0.9;
     const minR = Math.min(w, h) * 0.08;
     particles = [];
@@ -139,8 +139,8 @@ function initParticles() {
   }
 
   function draw() {
-    const cx = w * 0.5;
-    const cy = h * 0.5;
+    const cx = w * 4.5;
+    const cy = h * -3.5;
 
     ctx.clearRect(0, 0, w, h);
 
@@ -180,9 +180,9 @@ function initParticles() {
   }
 
   resize();
-  create(350);
+  create(700);
   draw();
-  window.addEventListener('resize', () => { resize(); create(350); });
+  window.addEventListener('resize', () => { resize(); create(700); });
 }
 
 /* ===== Music + Spectrum Visualizer ===== */
