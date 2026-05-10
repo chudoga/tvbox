@@ -79,7 +79,7 @@ async function handleCopy(idx) {
   setTimeout(() => item.classList.remove('copied'), 2000);
 }
 
-/* ===== Colorful Particles Background ===== */
+/* ===== Orbital Particles Background ===== */
 const PALETTES = [
   { h: 220, s: 75 }, { h: 260, s: 70 }, { h: 330, s: 65 },
   { h: 190, s: 70 }, { h: 280, s: 60 }, { h: 350, s: 55 },
@@ -101,59 +101,49 @@ function initParticles() {
   }
 
   function create(count) {
+    const cx = w / 2;
+    const cy = h / 2;
+    const maxR = Math.min(w, h) * 0.48;
     particles = [];
     for (let i = 0; i < count; i++) {
       const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-      const big = Math.random() < 0.05;
       particles.push({
-        x: Math.random() * w, y: Math.random() * h,
-        r: big ? Math.random() * 3 + 2 : Math.random() * 2 + 0.8,
-        dx: (Math.random() - 0.5) * 0.3, dy: (Math.random() - 0.5) * 0.3 - 0.08,
+        radius: 15 + Math.random() * maxR,
+        angle: Math.random() * Math.PI * 2,
+        speed: (0.3 + Math.random() * 0.7) * 0.006,
+        size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
-        light: 60 + Math.random() * 20,
-        a: 0.4 + Math.random() * 0.5,
-        da: (Math.random() - 0.5) * 0.007,
-        big: big
+        light: 55 + Math.random() * 25,
+        a: 0.5 + Math.random() * 0.5,
       });
     }
   }
 
   function draw() {
-    ctx.fillStyle = 'rgba(11,14,23,0.12)';
+    ctx.fillStyle = 'rgba(11,14,23,0.03)';
     ctx.fillRect(0, 0, w, h);
+
+    const cx = w / 2;
+    const cy = h / 2;
+
     for (const p of particles) {
-      p.x += p.dx; p.y += p.dy; p.a += p.da;
-      if (p.a > 0.95 || p.a < 0.15) p.da = -p.da;
-      if (p.x < -10) p.x = w + 10;
-      if (p.x > w + 10) p.x = -10;
-      if (p.y < -10) p.y = h + 10;
-      if (p.y > h + 10) p.y = -10;
+      p.angle += p.speed;
+      const x = cx + Math.cos(p.angle) * p.radius;
+      const y = cy + Math.sin(p.angle) * p.radius;
 
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      if (p.big) {
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
-        g.addColorStop(0, `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a * 0.5})`);
-        g.addColorStop(1, `hsla(${p.hue},${p.sat}%,${p.light}%,0)`);
-        ctx.fillStyle = g;
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * 0.5, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue},${p.sat}%,${p.light + 20}%,${p.a})`;
-        ctx.fill();
-      } else {
-        ctx.fillStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a})`;
-        ctx.fill();
-      }
+      ctx.arc(x, y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a})`;
+      ctx.fill();
     }
     requestAnimationFrame(draw);
   }
 
   resize();
-  create(450);
+  create(350);
   draw();
-  window.addEventListener('resize', () => { resize(); create(450); });
+  window.addEventListener('resize', () => { resize(); create(350); });
 }
 
 /* ===== Music Toggle ===== */
