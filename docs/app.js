@@ -1,3 +1,15 @@
+/* ===== CC0 Chiptune Tracks ===== */
+const CHIPTUNE_TRACKS = [
+  { name: 'Adventure Begins Loop', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/9Cz5CyYrEUH2pIV40073yh35ujLYjyIGem7WIkTP.mp3' },
+  { name: 'Level 3', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/HIOHWMQb9e4Ba1QGDPXjtiM8YD2rF0Lyr3WXbsQO.mp3' },
+  { name: 'Level 1', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/EjMD3Brwwi59jnXHTmzbgd8t4VTTPJ4HckUX01XC.mp3' },
+  { name: 'Gamer 6969', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/ivzrhArbCUJdv4kgp4fu8ZVJlbnr7RvXq1z7s3bS.mp3' },
+  { name: 'Complications', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/gw3LM7cUSvSH5zSlhh5YqiJeDQJf3ZtnmKouN7YI.mp3' },
+  { name: 'Gamer 75', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/Lm0wS74pq16IhJmWnOudpf0EKwysfz8OSVvaUH3j.mp3' },
+  { name: 'ICE Temple', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/xUE4iusBleaVuTVhrR3w8R3SZiGajiURP9Jcr3Mt.mp3' },
+  { name: 'Rising Hero', url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/qPOeddOBF0W4rTeCQx3rPO4O8W0mAajf76dcrgYa.mp3' }
+];
+
 const SOURCES = [
   { name: '裤佬', url: 'https://pastebin.com/raw/enF00p5e', color: '#28a9e0', icon: '📦' },
   { name: '游魂', url: 'https://www.iyouhun.com/tv/dc', color: '#db1f76', icon: '👻' },
@@ -110,7 +122,7 @@ function initParticles() {
       particles.push({
         radius: 15 + Math.random() * maxR,
         angle: Math.random() * Math.PI * 2,
-        speed: (0.3 + Math.random() * 0.7) * 0.006,
+        speed: (0.3 + Math.random() * 0.7) * 0.025,
         size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
@@ -128,7 +140,7 @@ function initParticles() {
     const cy = h / 2;
 
     for (const p of particles) {
-      p.angle += p.speed;
+      p.angle -= p.speed;
       const x = cx + Math.cos(p.angle) * p.radius;
       const y = cy + Math.sin(p.angle) * p.radius;
 
@@ -146,22 +158,108 @@ function initParticles() {
   window.addEventListener('resize', () => { resize(); create(350); });
 }
 
-/* ===== Music Toggle ===== */
+/* ===== Music + Spectrum Visualizer ===== */
 const musicBtn = document.getElementById('musicBtn');
 const bgMusic = document.getElementById('bgMusic');
+const spectrumCanvas = document.getElementById('spectrum');
 let musicPlaying = false;
+let audioCtx = null;
+let analyser = null;
+let sourceNode = null;
+let spectAnimId = null;
+let currentTrackIdx = -1;
 
-musicBtn.addEventListener('click', () => {
+function pickTrack() {
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * CHIPTUNE_TRACKS.length);
+  } while (idx === currentTrackIdx && CHIPTUNE_TRACKS.length > 1);
+  currentTrackIdx = idx;
+  return CHIPTUNE_TRACKS[idx];
+}
+
+function resizeSpectrum() {
+  if (!spectrumCanvas) return;
+  spectrumCanvas.width = spectrumCanvas.clientWidth || window.innerWidth;
+  spectrumCanvas.height = spectrumCanvas.clientHeight || 72;
+}
+
+function drawSpectrum() {
+  if (!spectrumCanvas || !analyser) return;
+  const ctx = spectrumCanvas.getContext('2d');
+  const w = spectrumCanvas.width;
+  const h = spectrumCanvas.height;
+
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+  analyser.getByteFrequencyData(dataArray);
+
+  ctx.clearRect(0, 0, w, h);
+
+  const barCount = Math.min(bufferLength, 128);
+  const barWidth = w / barCount;
+  const grad = ctx.createLinearGradient(0, h, 0, 0);
+  grad.addColorStop(0, '#60a5fa');
+  grad.addColorStop(0.5, '#a78bfa');
+  grad.addColorStop(1, '#f472b6');
+  ctx.fillStyle = grad;
+
+  for (let i = 0; i < barCount; i++) {
+    const barHeight = (dataArray[i] / 255) * h;
+    ctx.fillRect(i * barWidth, h - barHeight, Math.max(barWidth - 1, 1), barHeight);
+  }
+
+  spectAnimId = requestAnimationFrame(drawSpectrum);
+}
+
+async function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 256;
+  sourceNode = audioCtx.createMediaElementSource(bgMusic);
+  sourceNode.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  resizeSpectrum();
+  window.addEventListener('resize', resizeSpectrum);
+}
+
+function loadRandomTrack() {
+  const track = pickTrack();
+  bgMusic.src = track.url;
+  bgMusic.load();
+  bgMusic.play().catch(() => {});
+}
+
+musicBtn.addEventListener('click', async () => {
   if (musicPlaying) {
     bgMusic.pause();
     musicBtn.classList.remove('playing');
-    musicBtn.textContent = '♫';
+    musicBtn.textContent = '\u266B';
+    if (spectAnimId) cancelAnimationFrame(spectAnimId);
+    spectrumCanvas.classList.remove('visible');
   } else {
-    bgMusic.play().catch(() => {});
-    musicBtn.classList.add('playing');
-    musicBtn.textContent = '♩';
+    try {
+      await initAudio();
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
+      if (!bgMusic.src) {
+        loadRandomTrack();
+      } else {
+        bgMusic.play().catch(() => {});
+      }
+      musicBtn.classList.add('playing');
+      musicBtn.textContent = '\u2669';
+      spectrumCanvas.classList.add('visible');
+      drawSpectrum();
+    } catch (e) {
+      console.warn('Audio init failed:', e);
+    }
   }
   musicPlaying = !musicPlaying;
+});
+
+bgMusic.addEventListener('ended', () => {
+  if (musicPlaying) loadRandomTrack();
 });
 
 /* ===== Init ===== */
