@@ -135,7 +135,7 @@ function initParticles() {
         radius,
         angle,
         speed: (0.3 + Math.random() * 0.7) * 0.00125,
-        size: Math.random() * 10 + 4,
+        size: Math.random() * 5 + 2,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
         light: 55 + Math.random() * 25,
@@ -175,7 +175,7 @@ function initParticles() {
             ctx.lineTo(p.trail[j].x, p.trail[j].y);
           }
           ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a * fade})`;
-          ctx.lineWidth = p.size * 2 * fade;
+          ctx.lineWidth = p.size;
           ctx.stroke();
         }
       }
