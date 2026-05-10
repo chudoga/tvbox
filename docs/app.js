@@ -1,37 +1,9 @@
 /* ============ Data ============ */
 // 多仓接口 - 每个仓可以有多条线路
 const SOURCES_DATA = [
-  {
-    "name": "裤佬",
-    "desc": "TG频道 @stymei",
-    "urls": [
-      { "label": "接口", "url": "https://jsnzkpg.github.io/" },
-      { "label": "备用", "url": "https://pastebin.com/raw/enF00p5e" }
-    ]
-  },
-  {
-    "name": "欧歌",
-    "desc": "",
-    "urls": [
-      { "label": "接口", "url": "https://xn--5jj5-wn6lw489o.v.nxog.top/apia?id=1" }
-    ]
-  },
-  {
-    "name": "游魂",
-    "desc": "",
-    "urls": [
-      { "label": "接口", "url": "https://app.iyouhun.com/detail.php?id=888" },
-      { "label": "接口2", "url": "https://www.iyouhun.com/tv/dc" }
-    ]
-  },
-  {
-    "name": "自建拾光在线",
-    "desc": "",
-    "urls": [
-      { "label": "接口", "url": "https://gitee.com/chudogb/tvbox/raw/master/shiguang" },
-      { "label": "备用", "url": "https://xmbjm.fh4u.org/dc.txt" }
-    ]
-  }
+  { "name": "裤佬", "url": "https://pastebin.com/raw/enF00p5e" },
+  { "name": "游魂", "url": "https://www.iyouhun.com/tv/dc" },
+  { "name": "拾光", "url": "https://xmbjm.fh4u.org/dc.txt" }
 ];
 
 /* ============ State ============ */
@@ -80,28 +52,20 @@ function render() {
 
   SOURCES_DATA.forEach((entry, idx) => {
     const cardId = `card-${idx}`;
-    const urlsHtml = entry.urls.map((u, ui) => {
-      const urlId = `${cardId}-url-${ui}`;
-      return `
-        <div class="card-url-row" id="${urlId}">
-          <span class="url-label">${escapeHtml(u.label)}</span>
-          <span class="url-text" title="${escapeHtml(u.url)}">${escapeHtml(u.url)}</span>
-          <div class="url-actions">
-            <button class="btn btn-copy" onclick="copyUrl('${escapeHtml(u.url)}', this)" title="复制链接">复制</button>
-            <button class="btn btn-check" onclick="checkUrl('${escapeHtml(u.url)}', '${urlId}')" title="检测可用性">检测</button>
-          </div>
-        </div>
-      `;
-    }).join('');
-
     html += `
       <div class="source-card" id="${cardId}" data-name="${entry.name}">
         <div class="card-header">
           <span class="card-name">${entry.name}</span>
-          ${entry.desc ? `<span class="card-desc">${entry.desc}</span>` : ''}
-          <span class="card-badge">${entry.urls.length} 条线路</span>
         </div>
-        <div class="card-urls">${urlsHtml}</div>
+        <div class="card-urls">
+          <div class="card-url-row" id="${cardId}-url">
+            <span class="url-text" title="${escapeHtml(entry.url)}">${escapeHtml(entry.url)}</span>
+            <div class="url-actions">
+              <button class="btn btn-copy" onclick="copyUrl('${escapeHtml(entry.url)}', this)" title="复制链接">复制</button>
+              <button class="btn btn-check" onclick="checkUrl('${escapeHtml(entry.url)}', '${cardId}-url')" title="检测可用性">检测</button>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   });

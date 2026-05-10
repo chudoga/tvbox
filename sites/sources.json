@@ -1,35 +1,7 @@
 {
   "sources": [
-    {
-      "name": "裤佬",
-      "desc": "TG频道 @stymei",
-      "urls": [
-        { "label": "接口", "url": "https://jsnzkpg.github.io/" },
-        { "label": "备用", "url": "https://pastebin.com/raw/enF00p5e" }
-      ]
-    },
-    {
-      "name": "欧歌",
-      "desc": "",
-      "urls": [
-        { "label": "接口", "url": "https://xn--5jj5-wn6lw489o.v.nxog.top/apia?id=1" }
-      ]
-    },
-    {
-      "name": "游魂",
-      "desc": "",
-      "urls": [
-        { "label": "接口", "url": "https://app.iyouhun.com/detail.php?id=888" },
-        { "label": "接口2", "url": "https://www.iyouhun.com/tv/dc" }
-      ]
-    },
-    {
-      "name": "自建拾光在线",
-      "desc": "",
-      "urls": [
-        { "label": "接口", "url": "https://gitee.com/chudogb/tvbox/raw/master/shiguang" },
-        { "label": "备用", "url": "https://xmbjm.fh4u.org/dc.txt" }
-      ]
-    }
+    { "name": "裤佬", "url": "https://pastebin.com/raw/enF00p5e" },
+    { "name": "游魂", "url": "https://www.iyouhun.com/tv/dc" },
+    { "name": "拾光", "url": "https://xmbjm.fh4u.org/dc.txt" }
   ]
 }
