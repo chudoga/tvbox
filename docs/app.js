@@ -52,7 +52,8 @@ function setQuote() {
   greetingEl.classList.add('fade');
   const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   const parts = q.split('，');
-  sloganEl.innerHTML = parts.map(p => '<div>' + p + '</div>').join('');
+  const mid = Math.ceil(parts.length / 2);
+  sloganEl.innerHTML = parts.slice(0, mid).join('，') + '<br>' + parts.slice(mid).join('，');
   sloganEl.classList.add('visible');
 }
 
@@ -273,6 +274,7 @@ function tryStartMusic() {
   initAudio().then(() => {
     if (audioCtx.state === 'suspended') return audioCtx.resume();
   }).then(() => {
+    if (musicPlaying || bgMusic.src) return;
     loadRandomTrack();
     musicBtn.classList.add('playing');
     musicBtn.textContent = '\u2669';
@@ -287,7 +289,6 @@ setTimeout(tryStartMusic, 1000);
 function onFirstInteraction() {
   document.removeEventListener('click', onFirstInteraction);
   document.removeEventListener('touchstart', onFirstInteraction);
-  document.removeEventListener('keydown', onFirstInteraction);
   tryStartMusic();
 }
 document.addEventListener('click', onFirstInteraction);
