@@ -123,7 +123,7 @@ function initParticles() {
       particles.push({
         radius: minR + Math.random() * maxR,
         angle: Math.random() * Math.PI * 2,
-        speed: (0.3 + Math.random() * 0.7) * 0.0015,
+        speed: (0.3 + Math.random() * 0.7) * 0.00075,
         size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
@@ -225,11 +225,17 @@ async function initAudio() {
   window.addEventListener('resize', resizeSpectrum);
 }
 
-function loadRandomTrack() {
+function setTrack() {
   const track = pickTrack();
   bgMusic.src = track.url;
-  bgMusic.load();
-  bgMusic.play().catch(() => {});
+  return track;
+}
+
+function playMusic() {
+  bgMusic.play().catch(() => {
+    bgMusic.load();
+    bgMusic.play().catch(() => {});
+  });
 }
 
 musicBtn.addEventListener('click', async () => {
@@ -241,13 +247,10 @@ musicBtn.addEventListener('click', async () => {
     spectrumCanvas.classList.remove('visible');
   } else {
     try {
-      await initAudio();
+      if (!bgMusic.src) setTrack();
+      if (!audioCtx) await initAudio();
       if (audioCtx.state === 'suspended') await audioCtx.resume();
-      if (!bgMusic.src) {
-        loadRandomTrack();
-      } else {
-        bgMusic.play().catch(() => {});
-      }
+      playMusic();
       musicBtn.classList.add('playing');
       musicBtn.textContent = '\u2669';
       spectrumCanvas.classList.add('visible');
@@ -260,7 +263,7 @@ musicBtn.addEventListener('click', async () => {
 });
 
 bgMusic.addEventListener('ended', () => {
-  if (musicPlaying) loadRandomTrack();
+  if (musicPlaying) { setTrack(); playMusic(); }
 });
 
 /* ===== Init ===== */
@@ -271,11 +274,12 @@ initParticles();
 // Autoplay music - try on load, also capture first user interaction
 function tryStartMusic() {
   if (musicPlaying) return;
+  if (!bgMusic.src) setTrack();
   initAudio().then(() => {
     if (audioCtx.state === 'suspended') return audioCtx.resume();
   }).then(() => {
-    if (musicPlaying || bgMusic.src) return;
-    loadRandomTrack();
+    if (musicPlaying || !bgMusic.src) return;
+    playMusic();
     musicBtn.classList.add('playing');
     musicBtn.textContent = '\u2669';
     spectrumCanvas.classList.add('visible');
