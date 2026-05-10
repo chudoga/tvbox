@@ -12,29 +12,35 @@
   <canvas id="bgCanvas" class="bg-canvas"></canvas>
   <div class="cover"></div>
 
+  <div class="deco-logo">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="16" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <path d="M12 14h12v4l-3 2v4h-6v-4l-3-2v-4z" fill="rgba(255,255,255,0.12)"/>
+      <rect x="14" y="10" width="8" height="2" rx="1" fill="rgba(255,255,255,0.08)"/>
+    </svg>
+  </div>
+
   <div class="main">
     <div class="container">
       <div class="hero">
         <div class="slogan-wrap">
-          <h1 id="greeting">Hi~</h1>
-          <h1 id="slogan" class="hidden"></h1>
-        </div>
-        <div class="brand">
-          <div class="brand-ring">
-            <span></span><span></span><span></span>
-          </div>
-          仓
+          <h1 class="greeting">Hi~</h1>
+          <h1 id="slogan" class="slogan-text"></h1>
         </div>
       </div>
 
       <div class="links-section">
-        <h2 class="section-title">多仓 <span>接口（点击复制）</span></h2>
+        <h2 class="section-title">多仓接口</h2>
         <div class="links-grid" id="sourceList"></div>
       </div>
     </div>
-
     <div class="push"></div>
   </div>
+
+  <button class="music-btn" id="musicBtn" aria-label="背景音乐">♫</button>
+  <audio id="bgMusic" loop preload="none">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 
   <footer class="footer">
     <div class="container">
