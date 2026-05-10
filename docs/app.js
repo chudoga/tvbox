@@ -238,7 +238,7 @@ async function initAudio() {
   if (audioCtx) return;
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 1024;
+  analyser.fftSize = 512;
   analyser.connect(audioCtx.destination);
   resizeSpectrum();
   window.addEventListener('resize', resizeSpectrum);
