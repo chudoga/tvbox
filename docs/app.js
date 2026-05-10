@@ -120,8 +120,8 @@ function initParticles() {
   }
 
   function create(count) {
-    const cx = w * 1.26;
-    const cy = h * -0.26;
+    const cx = w * 0.9;
+    const cy = h * 0.1;
     const maxR = Math.max(w, h) * 0.9;
     const minR = Math.min(w, h) * 0.08;
     particles = [];
@@ -147,8 +147,8 @@ function initParticles() {
   }
 
   function draw() {
-    const cx = w * 1.26;
-    const cy = h * -0.26;
+    const cx = w * 0.9;
+    const cy = h * 0.1;
 
     ctx.fillStyle = 'rgba(11,14,23,0.008)';
     ctx.fillRect(0, 0, w, h);
