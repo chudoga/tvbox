@@ -95,7 +95,9 @@ async function handleCopy(idx) {
 const PALETTES = [
   { h: 220, s: 75 }, { h: 260, s: 70 }, { h: 330, s: 65 },
   { h: 190, s: 70 }, { h: 280, s: 60 }, { h: 350, s: 55 },
-  { h: 210, s: 65 }, { h: 300, s: 55 }
+  { h: 210, s: 65 }, { h: 300, s: 55 }, { h: 180, s: 80 },
+  { h: 15, s: 75 },  { h: 50, s: 80 },  { h: 120, s: 65 },
+  { h: 340, s: 70 }, { h: 40, s: 60 },  { h: 160, s: 75 }
 ];
 
 function initParticles() {
@@ -120,33 +122,47 @@ function initParticles() {
     particles = [];
     for (let i = 0; i < count; i++) {
       const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+      const angle = Math.random() * Math.PI * 2;
+      const radius = minR + Math.random() * maxR;
       particles.push({
-        radius: minR + Math.random() * maxR,
-        angle: Math.random() * Math.PI * 2,
+        radius,
+        angle,
         speed: (0.3 + Math.random() * 0.7) * 0.00035,
         size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
         light: 55 + Math.random() * 25,
         a: 0.5 + Math.random() * 0.5,
+        sx: cx + Math.cos(angle) * radius,
+        sy: cy + Math.sin(angle) * radius,
+        x: cx + Math.cos(angle) * radius,
+        y: cy + Math.sin(angle) * radius,
       });
     }
   }
 
   function draw() {
-    ctx.fillStyle = 'rgba(11,14,23,0.006)';
-    ctx.fillRect(0, 0, w, h);
+    ctx.clearRect(0, 0, w, h);
 
     const cx = w * 0.88;
     const cy = h * 0.12;
 
     for (const p of particles) {
+      p.sx = p.x;
+      p.sy = p.y;
       p.angle += p.speed;
-      const x = cx + Math.cos(p.angle) * p.radius;
-      const y = cy + Math.sin(p.angle) * p.radius;
+      p.x = cx + Math.cos(p.angle) * p.radius;
+      p.y = cy + Math.sin(p.angle) * p.radius;
 
       ctx.beginPath();
-      ctx.arc(x, y, p.size, 0, Math.PI * 2);
+      ctx.moveTo(p.sx, p.sy);
+      ctx.lineTo(p.x, p.y);
+      ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,0.3)`;
+      ctx.lineWidth = p.size * 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fillStyle = `hsla(${p.hue},${p.sat}%,${p.light}%,${p.a})`;
       ctx.fill();
     }
@@ -166,9 +182,9 @@ const spectrumCanvas = document.getElementById('spectrum');
 let musicPlaying = false;
 let audioCtx = null;
 let analyser = null;
-let sourceNode = null;
 let spectAnimId = null;
 let currentTrackIdx = -1;
+let audioBuffer = null;
 
 function pickTrack() {
   let idx;
@@ -215,47 +231,53 @@ function drawSpectrum() {
 
 async function initAudio() {
   if (audioCtx) return;
-  if (!bgMusic.src) setTrack();
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
   analyser.fftSize = 256;
-  sourceNode = audioCtx.createMediaElementSource(bgMusic);
-  sourceNode.connect(analyser);
   analyser.connect(audioCtx.destination);
   resizeSpectrum();
   window.addEventListener('resize', resizeSpectrum);
 }
 
-function setTrack() {
-  const track = pickTrack();
-  bgMusic.src = track.url;
-  bgMusic.load();
+async function loadTrack(url) {
+  const resp = await fetch(url);
+  const buf = await resp.arrayBuffer();
+  audioBuffer = await audioCtx.decodeAudioData(buf);
 }
 
-function waitForCanPlay() {
-  if (bgMusic.readyState >= 2) return;
-  return new Promise(r => { bgMusic.addEventListener('canplay', r, { once: true }); });
+function playBuffer(offset) {
+  const source = audioCtx.createBufferSource();
+  source.buffer = audioBuffer;
+  source.loop = true;
+  source.connect(analyser);
+  source.start(0, offset || 0);
+  return source;
 }
 
 async function startMusic() {
   try {
-    if (!audioCtx) await initAudio();
+    await initAudio();
     if (audioCtx.state === 'suspended') await audioCtx.resume();
-    await waitForCanPlay();
-    bgMusic.currentTime = 0;
-    await bgMusic.play();
+    if (!audioBuffer) {
+      const track = pickTrack();
+      await loadTrack(track.url);
+    }
+    playBuffer(0);
     musicBtn.classList.add('playing');
     musicBtn.textContent = '\u2669';
     spectrumCanvas.classList.add('visible');
     drawSpectrum();
     musicPlaying = true;
   } catch (e) {
-    // Browser blocked play - user needs to interact
+    // Browser blocked or network error
   }
 }
 
 function stopMusic() {
-  bgMusic.pause();
+  audioCtx && audioCtx.close();
+  audioCtx = null;
+  analyser = null;
+  audioBuffer = null;
   musicBtn.classList.remove('playing');
   musicBtn.textContent = '\u266B';
   if (spectAnimId) cancelAnimationFrame(spectAnimId);
@@ -269,10 +291,6 @@ musicBtn.addEventListener('click', async () => {
   } else {
     await startMusic();
   }
-});
-
-bgMusic.addEventListener('ended', () => {
-  if (musicPlaying) { setTrack(); startMusic(); }
 });
 
 /* ===== Init ===== */
