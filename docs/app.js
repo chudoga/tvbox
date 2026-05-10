@@ -150,7 +150,7 @@ function initParticles() {
     const cx = w * 0.9;
     const cy = h * 0.1;
 
-    ctx.fillStyle = 'rgba(11,14,23,0.008)';
+    ctx.fillStyle = 'rgba(11,14,23,0.05)';
     ctx.fillRect(0, 0, w, h);
 
     for (const p of particles) {
