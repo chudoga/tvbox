@@ -135,7 +135,7 @@ function initParticles() {
         radius,
         angle,
         speed: (0.3 + Math.random() * 0.7) * 0.00125,
-        size: Math.random() * 1.25 + 0.5,
+        size: Math.random() * 10 + 4,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
         light: 55 + Math.random() * 25,
@@ -155,7 +155,7 @@ function initParticles() {
 
     for (const p of particles) {
       p.trail.push({x: p.x, y: p.y});
-      if (p.trail.length > 600) p.trail.shift();
+      if (p.trail.length > 75) p.trail.shift();
 
       p.angle += p.speed;
       p.x = cx + Math.cos(p.angle) * p.radius;
