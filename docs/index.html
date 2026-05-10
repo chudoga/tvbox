@@ -2,32 +2,45 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>TVBox 订阅源导航</title>
   <meta name="description" content="TVBox 多仓订阅源导航 - 一键复制接口">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <section class="hero">
-      <h1 class="greeting">Hi~</h1>
-      <div class="brand-char">仓</div>
-      <p class="subtitle">多仓 接口（点击复制）</p>
-    </section>
+  <canvas id="starfield"></canvas>
+  <div class="cover"></div>
 
-    <section class="sources" id="sources"></section>
+  <div class="main">
+    <div class="container">
+      <div class="hero">
+        <h1 id="slogan"></h1>
+        <div class="brand">
+          <div class="brand-ring">
+            <span></span><span></span><span></span>
+          </div>
+          仓
+        </div>
+      </div>
 
-    <div class="toast" id="toast"></div>
+      <div class="links-section">
+        <h2 class="section-title">多仓 <span>接口（点击复制）</span></h2>
+        <div class="links-grid" id="sourceList"></div>
+      </div>
+    </div>
 
-    <footer class="footer">
-      <p>Powered by TVBox · 数据仅供学习参考</p>
-      <p class="footer-links">
-        <a href="https://github.com/chudoga/tvbox" target="_blank" rel="noopener">GitHub</a>
-      </p>
-    </footer>
+    <div class="push"></div>
   </div>
 
+  <footer class="footer">
+    <div class="container">
+      <h4>&copy; 2026 Powered by TVBox</h4>
+      <a href="https://github.com/chudoga/tvbox" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
   <script src="app.js"></script>
 </body>
 </html>
