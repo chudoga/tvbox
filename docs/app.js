@@ -123,7 +123,7 @@ function initParticles() {
       particles.push({
         radius: minR + Math.random() * maxR,
         angle: Math.random() * Math.PI * 2,
-        speed: (0.3 + Math.random() * 0.7) * 0.00075,
+        speed: (0.3 + Math.random() * 0.7) * 0.00035,
         size: Math.random() * 2.5 + 1,
         hue: p.h + (Math.random() - 0.5) * 15,
         sat: p.s + (Math.random() - 0.5) * 8,
@@ -215,6 +215,7 @@ function drawSpectrum() {
 
 async function initAudio() {
   if (audioCtx) return;
+  if (!bgMusic.src) setTrack();
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser();
   analyser.fftSize = 256;
@@ -228,42 +229,50 @@ async function initAudio() {
 function setTrack() {
   const track = pickTrack();
   bgMusic.src = track.url;
-  return track;
+  bgMusic.load();
 }
 
-function playMusic() {
-  bgMusic.play().catch(() => {
-    bgMusic.load();
-    bgMusic.play().catch(() => {});
-  });
+function waitForCanPlay() {
+  if (bgMusic.readyState >= 2) return;
+  return new Promise(r => { bgMusic.addEventListener('canplay', r, { once: true }); });
+}
+
+async function startMusic() {
+  try {
+    if (!audioCtx) await initAudio();
+    if (audioCtx.state === 'suspended') await audioCtx.resume();
+    await waitForCanPlay();
+    bgMusic.currentTime = 0;
+    await bgMusic.play();
+    musicBtn.classList.add('playing');
+    musicBtn.textContent = '\u2669';
+    spectrumCanvas.classList.add('visible');
+    drawSpectrum();
+    musicPlaying = true;
+  } catch (e) {
+    // Browser blocked play - user needs to interact
+  }
+}
+
+function stopMusic() {
+  bgMusic.pause();
+  musicBtn.classList.remove('playing');
+  musicBtn.textContent = '\u266B';
+  if (spectAnimId) cancelAnimationFrame(spectAnimId);
+  spectrumCanvas.classList.remove('visible');
+  musicPlaying = false;
 }
 
 musicBtn.addEventListener('click', async () => {
   if (musicPlaying) {
-    bgMusic.pause();
-    musicBtn.classList.remove('playing');
-    musicBtn.textContent = '\u266B';
-    if (spectAnimId) cancelAnimationFrame(spectAnimId);
-    spectrumCanvas.classList.remove('visible');
+    stopMusic();
   } else {
-    try {
-      if (!bgMusic.src) setTrack();
-      if (!audioCtx) await initAudio();
-      if (audioCtx.state === 'suspended') await audioCtx.resume();
-      playMusic();
-      musicBtn.classList.add('playing');
-      musicBtn.textContent = '\u2669';
-      spectrumCanvas.classList.add('visible');
-      drawSpectrum();
-    } catch (e) {
-      console.warn('Audio init failed:', e);
-    }
+    await startMusic();
   }
-  musicPlaying = !musicPlaying;
 });
 
 bgMusic.addEventListener('ended', () => {
-  if (musicPlaying) { setTrack(); playMusic(); }
+  if (musicPlaying) { setTrack(); startMusic(); }
 });
 
 /* ===== Init ===== */
@@ -271,29 +280,5 @@ renderSources();
 setTimeout(setQuote, 2000);
 initParticles();
 
-// Autoplay music - try on load, also capture first user interaction
-function tryStartMusic() {
-  if (musicPlaying) return;
-  if (!bgMusic.src) setTrack();
-  initAudio().then(() => {
-    if (audioCtx.state === 'suspended') return audioCtx.resume();
-  }).then(() => {
-    if (musicPlaying || !bgMusic.src) return;
-    playMusic();
-    musicBtn.classList.add('playing');
-    musicBtn.textContent = '\u2669';
-    spectrumCanvas.classList.add('visible');
-    drawSpectrum();
-    musicPlaying = true;
-  }).catch(() => {});
-}
-
-setTimeout(tryStartMusic, 1000);
-
-function onFirstInteraction() {
-  document.removeEventListener('click', onFirstInteraction);
-  document.removeEventListener('touchstart', onFirstInteraction);
-  tryStartMusic();
-}
-document.addEventListener('click', onFirstInteraction);
-document.addEventListener('touchstart', onFirstInteraction);
+// Autoplay attempt (browser may block)
+setTimeout(() => startMusic(), 1000);
